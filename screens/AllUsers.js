@@ -6,6 +6,7 @@ import { FlatList } from 'react-native';
 import { ExpensesContext } from '../store/expenses-context';
 import UserItem from '../components/ExpensesOutput/UserItem';
 import { GlobalStyles } from '../constants/styles';
+import ExpensesSummary from '../components/ExpensesOutput/ExpensesSummary';
 
 function renderUsersItem(itemData) {
 	return <UserItem {...itemData.item} />;
@@ -32,6 +33,7 @@ function AllUsers() {
     const formatData = formatDataByEmail(expensesCtx.expenses);
 	return (
         <View style={styles.container}>
+          <ExpensesSummary expenses={expensesCtx.expenses} periodName={'Total'} />
         <FlatList
 			data={formatData}
 			renderItem={renderUsersItem}
