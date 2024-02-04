@@ -10,7 +10,7 @@ import { GlobalStyles } from '../../constants/styles';
 
 import { AuthContext } from '../../store/auth-context';
 
-function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
+function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues, isEditing }) {
 	const authCtx = useContext(AuthContext);
 	const email = authCtx.email;
 	const [inputs, setInputs] = useState({
@@ -115,9 +115,10 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
 				<Button style={styles.button} mode='flat' onPress={onCancel}>
 					Cancel
 				</Button>
+				{(!isEditing || (isEditing && email === defaultValues.email)) && (
 				<Button style={styles.button} onPress={submitHandler}>
 					{submitButtonLabel}
-				</Button>
+				</Button>)}
 			</View>
 		</View>
 	);

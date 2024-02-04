@@ -1,42 +1,31 @@
 /* eslint-disable prettier/prettier */
 import * as React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 
 import { GlobalStyles } from '../../constants/styles';
-import { getFormattedDate } from '../../util/date';
-import { trimAndAppendDots } from '../../util/common';
 
-function ExpenseItem({ id, description, amount, date, email }) {
-	const navigation = useNavigation();
-
-	function expensePressHandler() {
-		navigation.navigate('ManageExpense', {
-			expenseId: id,
-		});
-	}
-
+function UserItem({  email,totalAmount,items }) {
+    const entries = items.length;
 	return (
 		<Pressable
-			onPress={expensePressHandler}
+			onPress={()=>{}}
 			style={({ pressed }) => pressed && styles.pressed}
 		>
 			<View style={styles.expenseItem}>
 				<View>
 					<Text style={[styles.textBase, styles.description]}>
-						{trimAndAppendDots(description)}
+						{(email.split('@')[0])}
 					</Text>
-					<Text style={styles.textBase}>{getFormattedDate(date)}</Text>
-					<Text style={styles.textBase}>Created By : {trimAndAppendDots(email.split('@')[0])}</Text>
+					 <Text style={styles.textBase}>Total {entries} Entr{entries > 1 ?'ies':'y'}</Text>
 				</View>
 				<View style={styles.amountContainer}>
-					<Text style={styles.amount}>Rs.{amount}</Text>
+					<Text style={styles.amount}>Rs.{totalAmount}</Text>
 				</View>
 			</View>
 		</Pressable>
 	);
 }
-export default ExpenseItem;
+export default UserItem;
 
 const styles = StyleSheet.create({
 	pressed: {

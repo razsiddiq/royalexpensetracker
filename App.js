@@ -16,6 +16,7 @@ import SignupScreen from './screens/SignupScreen';
 import ManageExpense from './screens/ManageExpense';
 import RecentExpense from './screens/RecentExpenses';
 import AllExpenses from './screens/AllExpenses';
+import AllUsers from './screens/AllUsers';
 import {GlobalStyles} from './constants/styles';
 import IconButton from './components/UI/IconButton';
 import ExpensesContextProvider from './store/expenses-context';
@@ -154,6 +155,18 @@ function ExpensesOverview() {
 					// eslint-disable-next-line react/no-unstable-nested-components
 					tabBarIcon: ({ color, size }) => (
 						<Icon name="calendar" size={size} color={color} />
+					),
+				}}
+			/>
+			<BottomTabs.Screen
+				name='Users'
+				component={AllUsers}
+				options={{
+					title: 'Users Wise Expenses',
+					tabBarLabel: 'Users',
+					// eslint-disable-next-line react/no-unstable-nested-components
+					tabBarIcon: ({ color, size }) => (
+						<Icon name="people" size={size} color={color} />
 					),
 				}}
 			/>
