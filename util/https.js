@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import axios from 'axios';
 
 const BACKEND_URL = 'https://expense-tracker-6bf16-default-rtdb.firebaseio.com';

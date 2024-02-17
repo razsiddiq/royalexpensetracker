@@ -84,8 +84,9 @@ function Root() {
   	async function fetchToken() {
   		const storedToken = await AsyncStorage.getItem('token');
   		const storedEmail = await AsyncStorage.getItem('email');
+		const storedPassword = await AsyncStorage.getItem('password');
   		if (storedToken) {
-  			authCtx.authenticate(storedToken, storedEmail);
+  			authCtx.authenticate(storedToken, storedEmail, storedPassword);
   		}
   		setIsTryingLogin(false);
   	}
@@ -122,10 +123,11 @@ function ExpensesOverview() {
 						/>
 					);
 				},
+				// eslint-disable-next-line react/no-unstable-nested-components
 				headerRight: ({ tintColor }) => {
 					return (
 						<IconButton
-							icon='exit'
+							icon="exit"
 							color={tintColor}
 							size={24}
 							onPress={authCtx.logout}
@@ -135,7 +137,7 @@ function ExpensesOverview() {
 			})}
 		>
 			<BottomTabs.Screen
-				name='RecentExpenses'
+				name="RecentExpenses"
 				component={RecentExpense}
 				options={{
 					title: 'Recent Expenses',
@@ -147,7 +149,7 @@ function ExpensesOverview() {
 				}}
 			/>
 			<BottomTabs.Screen
-				name='AllExpenses'
+				name="AllExpenses"
 				component={AllExpenses}
 				options={{
 					title: 'All Expenses',
@@ -159,7 +161,7 @@ function ExpensesOverview() {
 				}}
 			/>
 			<BottomTabs.Screen
-				name='Users'
+				name="Users"
 				component={AllUsers}
 				options={{
 					title: 'Users Wise Expenses',

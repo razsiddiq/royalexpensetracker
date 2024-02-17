@@ -6,6 +6,7 @@ import { ExpensesContext } from '../store/expenses-context';
 import { AuthContext } from '../store/auth-context';
 import { getDateMinusDays } from '../util/date';
 import { fetchExpenses } from '../util/https';
+import { login } from '../util/auth';
 import LoadingOverlay from '../components/UI/LoadingOverlay';
 import ErrorOverlay from '../components/UI/ErrorOverlay';
 
@@ -15,6 +16,8 @@ function RecentExpense() {
 	const expensesCtx = useContext(ExpensesContext);
 	const authCtx = useContext(AuthContext);
 	const token = authCtx.token;
+	const password = authCtx.password;
+	const email = authCtx.email;
 
 	useEffect(() => {
 		async function getExpenses() {
@@ -22,7 +25,22 @@ function RecentExpense() {
 			try {
 				const expenses = await fetchExpenses({ token });
 				expensesCtx.setExpenses(expenses);
-			} catch (error) {
+			} catch (err) {	
+				if(err.response.status === 401)	{
+					try {
+						const { token : newToken, emailId } = await login(email, password);
+						//console.log("newToken",newToken)
+						authCtx.authenticate(newToken, emailId, password, async ()=>{
+							const expenses = await fetchExpenses({ token:newToken });
+							//console.log("expenses",expenses)
+							expensesCtx.setExpenses(expenses);
+							setError(null);
+						});
+					} catch (err1) {
+						console.log('step3');
+						console.log('error',err1);
+					}
+				}
 				setError('Could not fetch');
 			}
 			setIsFetching(false);
@@ -30,12 +48,24 @@ function RecentExpense() {
 		getExpenses();
 	}, []);
 
-	// function errorHandler() {
-	// 	setError(null);
-	// }
+	async function errorHandler() {
+		try {
+			const { token : newToken, emailId } = await login(email, password);
+			//console.log("newToken",newToken)
+			authCtx.authenticate(newToken, emailId, password, async ()=>{
+				const expenses = await fetchExpenses({ token:newToken });
+				//console.log("expenses",expenses)
+				expensesCtx.setExpenses(expenses);
+				setError(null);
+			});
+		} catch (err1) {
+			console.log('step3');
+			console.log('error',err1);
+		}
+	}
 
 	if (error && !isFetching) {
-		return <ErrorOverlay message={error} />; //onConfirm={errorHandler}
+		return <ErrorOverlay message={error} onConfirm={errorHandler}/>;
 	}
 	if (isFetching) {
 		return <LoadingOverlay />;
