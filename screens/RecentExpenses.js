@@ -50,6 +50,7 @@ function RecentExpense() {
 
 	async function errorHandler() {
 		try {
+			setIsFetching(true);
 			const { token : newToken, emailId } = await login(email, password);
 			//console.log("newToken",newToken)
 			authCtx.authenticate(newToken, emailId, password, async ()=>{
@@ -57,10 +58,12 @@ function RecentExpense() {
 				//console.log("expenses",expenses)
 				expensesCtx.setExpenses(expenses);
 				setError(null);
+				setIsFetching(false);
 			});
 		} catch (err1) {
 			console.log('step3');
 			console.log('error',err1);
+			setIsFetching(false);
 		}
 	}
 

@@ -1,7 +1,9 @@
 /* eslint-disable prettier/prettier */
 import * as React from 'react';
-import { StyleSheet, View, Text, Alert } from 'react-native';
+import { StyleSheet, View, Text, Alert, TouchableOpacity, Modal, Keyboard  } from 'react-native';
 import { useState, useContext } from 'react';
+
+import DatePicker from 'react-native-modern-datepicker';
 
 import Input from './Input';
 import Button from '../UI/Button';
@@ -12,7 +14,14 @@ import { AuthContext } from '../../store/auth-context';
 
 function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues, isEditing }) {
 	const authCtx = useContext(AuthContext);
+	const [open,setOpen] = useState(false);
 	const email = authCtx.email;
+
+	function handleOnPress(){
+		Keyboard.dismiss();
+		setOpen(!open);
+	}
+
 	const [inputs, setInputs] = useState({
 		amount: {
 			value: defaultValues ? defaultValues.amount.toString() : '',
@@ -32,7 +41,7 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues, isE
 		setInputs((curInputs) => {
 			return {
 				...curInputs,
-				[inputIdentifier]: { value: enteredValue, isValid: true },
+				[inputIdentifier]: { value: inputIdentifier === 'date' ? enteredValue.replace(/\//g, '-') : enteredValue, isValid: true },
 			};
 		});
 	}
@@ -71,6 +80,26 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues, isE
 
 	return (
 		<View style={styles.form}>
+			<TouchableOpacity onPress={handleOnPress}>
+				<Text>Open</Text>
+			</TouchableOpacity>
+			<Modal
+			animationType="slide"
+			transparent={true}
+			visible={open}
+			>
+				<View style={styles.modalView}>
+					<DatePicker
+						mode="calendar"
+						selectedDate={inputs.date.value}
+						onDateChange={inputChangeHandler.bind(this, 'date')}
+						format="YYYY-MM-DD"
+					/>
+					<TouchableOpacity onPress={handleOnPress}>
+						<Text>Close</Text>
+					</TouchableOpacity>
+				</View>
+			</Modal>
 			<Text style={styles.title}>Your Expense</Text>
 			<View style={styles.inputRow}>
 				<Input
@@ -82,12 +111,13 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues, isE
 						onChangeText: inputChangeHandler.bind(this, 'amount'),
 						value: inputs.amount.value,
 					}}
-				/>
+				/>	
 				<Input
 					style={styles.rowInput}
 					label={'date'}
 					invalid={!inputs.date.isValid}
 					textInputConfig={{
+						onPressIn: handleOnPress,
 						placeholder: 'YYYY-MM-DD',
 						maxLength: 10,
 						onChangeText: inputChangeHandler.bind(this, 'date'),
@@ -158,4 +188,20 @@ const styles = StyleSheet.create({
 		minWidth: 120,
 		marginHorizontal: 8,
 	},
+	modalView:{
+		margin:20,
+		backgroundColor:'white',
+		borderRadius:20,
+		width:'90%',
+		padding:35,
+		alignItems:'center',
+		shadowColor:'#000',
+		shadowOffset:{
+			width:0,
+			height:2,
+		},
+		shadowOpacity:0.25,
+		shadowRadius:4,
+		elevation:5,
+	}
 });
