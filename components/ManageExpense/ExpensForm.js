@@ -22,13 +22,15 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues, isE
 		setOpen(!open);
 	}
 
+	const currentDate = getFormattedDate(new Date());
+
 	const [inputs, setInputs] = useState({
 		amount: {
 			value: defaultValues ? defaultValues.amount.toString() : '',
 			isValid: true,
 		},
 		date: {
-			value: defaultValues ? getFormattedDate(defaultValues.date) : '',
+			value: defaultValues ? getFormattedDate(defaultValues.date) : currentDate,
 			isValid: true,
 		},
 		description: {
@@ -79,10 +81,7 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues, isE
 		!inputs.description.isValid;
 
 	return (
-		<View style={styles.form}>
-			<TouchableOpacity onPress={handleOnPress}>
-				<Text>Open</Text>
-			</TouchableOpacity>
+		<View style={styles.form}>			
 			<Modal
 			animationType="slide"
 			transparent={true}
@@ -96,7 +95,7 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues, isE
 						format="YYYY-MM-DD"
 					/>
 					<TouchableOpacity onPress={handleOnPress}>
-						<Text>Close</Text>
+						<Text style={styles.closeText}>Close</Text>
 					</TouchableOpacity>
 				</View>
 			</Modal>
@@ -203,5 +202,8 @@ const styles = StyleSheet.create({
 		shadowOpacity:0.25,
 		shadowRadius:4,
 		elevation:5,
-	}
+	},
+	closeText:{
+		color: GlobalStyles.colors.primary800,
+	},
 });

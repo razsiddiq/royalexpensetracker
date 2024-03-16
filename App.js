@@ -21,6 +21,8 @@ import {GlobalStyles} from './constants/styles';
 import IconButton from './components/UI/IconButton';
 import ExpensesContextProvider from './store/expenses-context';
 import AuthContextProvider, { AuthContext } from './store/auth-context';
+import { trimAndAppendDots } from './util/common';
+import UserWiseExpenses from './screens/UserWiseExpenses';
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
@@ -51,6 +53,16 @@ function AuthenticatedStack() {
 				name='ExpensesOverview'
 				component={ExpensesOverview}
 				options={{ headerShown: false }}
+			/>
+			<Stack.Screen
+				name='UserWiseExpenses'
+				component={UserWiseExpenses}
+				options={({route,navigate})=>{
+					const email = route.params.email;
+					return {
+						title: trimAndAppendDots(email.split('@')[0]) + ' Expenses',
+					}
+				}}
 			/>
 			<Stack.Screen
 				name='ManageExpense'
@@ -152,12 +164,12 @@ function ExpensesOverview() {
 				name="AllExpenses"
 				component={AllExpenses}
 				options={{
-					title: 'All Expenses',
-					tabBarLabel: 'All Expenses',
-					// eslint-disable-next-line react/no-unstable-nested-components
-					tabBarIcon: ({ color, size }) => (
-						<Icon name="calendar" size={size} color={color} />
-					),
+						title:  'All Expenses',
+						tabBarLabel: 'All Expenses',
+						// eslint-disable-next-line react/no-unstable-nested-components
+						tabBarIcon: ({ color, size }) => (
+							<Icon name="calendar" size={size} color={color} />
+						),
 				}}
 			/>
 			<BottomTabs.Screen

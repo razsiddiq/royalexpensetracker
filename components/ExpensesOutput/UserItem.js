@@ -1,14 +1,23 @@
 /* eslint-disable prettier/prettier */
 import * as React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import { GlobalStyles } from '../../constants/styles';
 
 function UserItem({  email,totalAmount,items }) {
+	const navigation = useNavigation();
     const entries = items.length;
+
+	function expensePressHandler(eml) {
+		navigation.navigate('UserWiseExpenses', {
+			email: eml,
+		});
+	}
+
 	return (
 		<Pressable
-			onPress={()=>{}}
+			onPress={()=>expensePressHandler(email)}
 			style={({ pressed }) => pressed && styles.pressed}
 		>
 			<View style={styles.expenseItem}>

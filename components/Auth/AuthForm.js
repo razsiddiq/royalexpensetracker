@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import * as React from 'react';
 import { useState } from 'react';
@@ -5,12 +6,15 @@ import { StyleSheet, View } from 'react-native';
 
 import Button from '../UI/Button';
 import Input from './Input';
+import IconButton from '../../components/UI/IconButton';
+import { GlobalStyles } from '../../constants/styles';
 
 function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
 	const [enteredEmail, setEnteredEmail] = useState('');
 	const [enteredConfirmEmail, setEnteredConfirmEmail] = useState('');
 	const [enteredPassword, setEnteredPassword] = useState('');
 	const [enteredConfirmPassword, setEnteredConfirmPassword] = useState('');
+	const [showPassword, setShowPassword] = useState(false);
 
 	const {
 		email: emailIsInvalid,
@@ -64,13 +68,25 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
 						isInvalid={emailsDontMatch}
 					/>
 				)}
-				<Input
-					label='Password'
-					onUpdateValue={updateInputValueHandler.bind(this, 'password')}
-					secure
-					value={enteredPassword}
-					isInvalid={passwordIsInvalid}
-				/>
+				<View style={{position:'relative'}}>
+					<Input
+						label='Password'
+						onUpdateValue={updateInputValueHandler.bind(this, 'password')}
+						secure={!showPassword}
+						value={enteredPassword}
+						isInvalid={passwordIsInvalid}
+					/>
+					<View style={styles.eye}>
+					<IconButton
+						icon={!showPassword ? 'eye':'eye-off'}
+						color={GlobalStyles.colors.primary800}
+						size={24}
+						onPress={() => {
+							setShowPassword(!showPassword)
+						}}
+					/>
+					</View>
+				</View>
 				{!isLogin && (
 					<Input
 						label='Confirm Password'
@@ -99,4 +115,9 @@ const styles = StyleSheet.create({
 	buttons: {
 		marginTop: 12,
 	},
+	eye:{
+		position:'absolute',
+		right:0,
+		top:30
+	}
 });

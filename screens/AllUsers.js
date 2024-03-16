@@ -34,11 +34,11 @@ function AllUsers() {
 	return (
         <View style={styles.container}>
           <ExpensesSummary expenses={expensesCtx.expenses} periodName={'Total'} />
-        <FlatList
-			data={formatData}
-			renderItem={renderUsersItem}
-			keyExtractor={(item) => item.email}
-		/>
+          <FlatList
+            data={formatData}
+            renderItem={renderUsersItem}
+            keyExtractor={(item) => item.email}
+          />
         </View>
 	);
 }

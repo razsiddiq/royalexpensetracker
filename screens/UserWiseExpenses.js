@@ -4,16 +4,17 @@ import { useContext } from 'react';
 import ExpensesOutput from '../components/ExpensesOutput/ExpensesOutput';
 import { ExpensesContext } from '../store/expenses-context';
 
-function AllExpenses({route}) {
+function UserWiseExpenses({route}) {
 	const expensesCtx = useContext(ExpensesContext);
+	const userEmail = route.params?.email;
 	return (
 		<ExpensesOutput
 			expenses={expensesCtx.expenses}
 			expensesPeriod={'Total'}
 			fallbackText={'No expenses registered.'}
-			userEmail={""}
+			userEmail={userEmail}
 		/>
 	);
 }
 
-export default AllExpenses;
+export default UserWiseExpenses;
